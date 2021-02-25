@@ -16,13 +16,39 @@ public class BasicTeleOp extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         tinyRobot = new TinyRobot();
         tinyRobot.initialize(this);
+        waitForStart();
+
+        tinyRobot.arm.release();
+        tinyRobot.arm.raise();
+
+        boolean released = true;
+        boolean raised = true;
         while (opModeIsActive()) {
-            double leftStickX = gamepad1.left_stick_x;
+            double leftStickX = -gamepad1.left_stick_x;
             double leftStickY = -gamepad1.left_stick_y;
             double rightStickX = gamepad1.right_stick_x;
             double rightStickY = -gamepad1.right_stick_y;
 
-            tinyRobot.drivetrain.setPowerDriveMotors(getMotorPowers(leftStickX, leftStickY, gamepad1.right_stick_x));
+            if (gamepad1.a) {
+                if (raised) {
+                    tinyRobot.arm.lower();
+                } else {
+                    tinyRobot.arm.raise();
+                }
+                raised = !raised;
+                sleep(300);
+            }
+            if (gamepad1.b) {
+                if (released) {
+                    tinyRobot.arm.clamp();
+                } else {
+                    tinyRobot.arm.release();
+                }
+                released = !released;
+                sleep(300);
+            }
+
+            tinyRobot.drivetrain.setPowerDriveMotors(getMotorPowers(leftStickX, leftStickY, rightStickX));
         }
     }
 

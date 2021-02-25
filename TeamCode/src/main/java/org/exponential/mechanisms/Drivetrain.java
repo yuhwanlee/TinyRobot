@@ -1,6 +1,7 @@
 package org.exponential.mechanisms;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.exponential.superclasses.Mechanism;
@@ -10,24 +11,25 @@ import java.util.HashMap;
 public class Drivetrain implements Mechanism {
     LinearOpMode opMode;
 
-    Servo frontLeft;
-    Servo frontRight;
-    Servo backLeft;
-    Servo backRight;
+    CRServo frontLeft;
+    CRServo frontRight;
+    CRServo backLeft;
+    CRServo backRight;
 
     @Override
     public void initialize(LinearOpMode opMode) {
         this.opMode = opMode;
-        frontLeft = opMode.hardwareMap.servo.get("frontLeft");
-        frontRight = opMode.hardwareMap.servo.get("frontRight");
-        backLeft = opMode.hardwareMap.servo.get("backLeft");
-        backRight = opMode.hardwareMap.servo.get("backRight");
+        frontLeft = opMode.hardwareMap.crservo.get("frontLeft");
+        frontRight = opMode.hardwareMap.crservo.get("frontRight");
+        backLeft = opMode.hardwareMap.crservo.get("backLeft");
+        backRight = opMode.hardwareMap.crservo.get("backRight");
+
     }
 
     public void setPowerDriveMotors(HashMap<String, Double> powers) {
-        frontLeft.setPosition(powers.get("frontLeft"));
-        backLeft.setPosition(powers.get("backLeft"));
-        frontRight.setPosition(powers.get("frontRight"));
-        backRight.setPosition(powers.get("backRight"));
+        frontLeft.setPower(-powers.get("frontLeft"));
+        backLeft.setPower(-powers.get("backLeft"));
+        frontRight.setPower(powers.get("frontRight"));
+        backRight.setPower(powers.get("backRight"));
     }
 }
